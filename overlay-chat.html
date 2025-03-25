@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overlay Chat</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Comic Sans MS', sans-serif;
+            background: transparent;
+        }
+
+        .chat-container {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 100%;
+            max-width: 400px;
+            max-height: 100%;
+            height: 100%;
+            overflow-y: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            background-color: #ad58cb; /* Updated background color */
+        }
+
+        .chat-message {
+            padding: 10px;
+            margin: 5px 10px;
+            border-radius: 10px;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-message.regular {
+            background-color: rgba(241, 241, 241, 0.8);
+            color: #333;
+        }
+
+        .chat-message.member {
+            background-color: rgba(209, 255, 214, 0.8);
+            color: #2e7d32;
+        }
+
+        .chat-message.moderator {
+            background-color: rgba(208, 240, 255, 0.8);
+            color: #0277bd;
+            border-left: 5px solid #0277bd;
+        }
+
+        .chat-message.owner {
+            background-color: rgba(255, 246, 209, 0.8);
+            color: #ff9800;
+            border-left: 5px solid #ff9800;
+        }
+
+        .chat-message.superchat {
+            background-color: rgba(255, 224, 178, 0.8);
+            color: #ef6c00;
+            border-left: 5px solid #ef6c00;
+        }
+
+        .chat-message .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .chat-message .username {
+            font-weight: bold;
+        }
+
+        .chat-message .badge {
+            background-color: #ffd700;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            text-align: center;
+            line-height: 20px;
+            margin-right: 5px;
+        }
+
+        .chat-message .badge.member {
+            background-color: #76ff03;
+        }
+
+        .chat-message .badge.moderator {
+            background-color: #03a9f4;
+        }
+
+        .chat-message .badge.owner {
+            background-color: #ffca28;
+        }
+
+        .chat-message .timestamp {
+            font-size: 0.8em;
+            color: #666;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container" id="chatContainer">
+        <!-- Chat messages will be dynamically added here -->
+    </div>
+
+    <script>
+        function addChatMessage(profilePic, username, message, role, timestamp) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('chat-message', role);
+
+            const profilePicImg = document.createElement('img');
+            profilePicImg.classList.add('profile-pic');
+            profilePicImg.src = profilePic;
+            profilePicImg.alt = username;
+
+            const badgeDiv = document.createElement('div');
+            badgeDiv.classList.add('badge', role);
+
+            const usernameDiv = document.createElement('span');
+            usernameDiv.classList.add('username');
+            usernameDiv.textContent = username;
+
+            const messageContentDiv = document.createElement('span');
+            messageContentDiv.textContent = `: ${message}`;
+
+            const timestampDiv = document.createElement('div');
+            timestampDiv.classList.add('timestamp');
+            timestampDiv.textContent = timestamp;
+
+            messageDiv.appendChild(profilePicImg);
+            messageDiv.appendChild(badgeDiv);
+            messageDiv.appendChild(usernameDiv);
+            messageDiv.appendChild(messageContentDiv);
+            messageDiv.appendChild(timestampDiv);
+
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function addSuperChat(profilePic, username, message, amount, timestamp) {
+            addChatMessage(profilePic, username, `Super Chat ($${amount}): ${message}`, 'superchat', timestamp);
+        }
+
+        function addNewMember(profilePic, username, timestamp) {
+            addChatMessage(profilePic, username, 'has become a new member!', 'member', timestamp);
+        }
+
+        function addMemberGift(profilePic, username, recipient, timestamp) {
+            addChatMessage(profilePic, username, `has gifted a membership to ${recipient}!`, 'member', timestamp);
+        }
+
+        // Example usage
+        addChatMessage('https://example.com/profile1.jpg', 'RegularUser', 'Hello, everyone!', 'regular', '01:00 PM');
+        addChatMessage('https://example.com/profile2.jpg', 'MemberUser', 'Hi! I am a member!', 'member', '01:01 PM');
+        addChatMessage('https://example.com/profile3.jpg', 'ModUser', 'Please follow the rules!', 'moderator', '01:02 PM');
+        addChatMessage('https://example.com/profile4.jpg', 'OwnerUser', 'Welcome to the stream!', 'owner', '01:03 PM');
+
+        // Simulated notifications
+        addSuperChat('https://example.com/profile5.jpg', 'SuperChatter', 'This is a Super Chat message!', 10, '01:04 PM');
+        addNewMember('https://example.com/profile6.jpg', 'NewMemberUser', '01:05 PM');
+        addMemberGift('https://example.com/profile7.jpg', 'GifterUser', 'RecipientUser', '01:06 PM');
+    </script>
+</body>
+</html>
